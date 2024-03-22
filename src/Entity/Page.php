@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use App\Repository\PageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,12 +36,10 @@ class Page
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(length: 255 , nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-  
-
-
+   
     public function __construct(Type $var = null){
         $this->setCreatedAt(new \DateTimeImmutable());
 
@@ -59,7 +58,7 @@ class Page
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
+        $this->setSlug((new Slugify())->slugify($title));
         return $this;
         
     }
@@ -137,6 +136,8 @@ class Page
 
         return $this;
     }
+
+
 
  
 

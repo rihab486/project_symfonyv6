@@ -45,8 +45,8 @@
                                 <a href="#">{{product.name}}</a>
                             </h4>
                              <div  class="product_price">
-                                    <span class="price">{{product.soldePrice/100}}</span><del>
-                                    {{product.regularPrice/100}} </del>
+                                    <span class="price">{{(product.soldePrice/100)  |  format_currency('EUR')}}</span><del>
+                                    {{(product.regularPrice/100) | format_currency('EUR')}} </del>
                                     <div class="on_sale"><span>{{((product.regularPrice*10 - product.soldePrice) / product.regularPrice) | number_format(2,'.') }} % Off</span></div>
                             </div>
                             <div class="rating_wrap">
@@ -71,15 +71,24 @@
                         <hr>
                         <div class="cart_extra">
                             <div class="cart-product-quantity">
-                                <div class="quantity"><input type="button" value="-" class="minus"><input type="text"
-                                        name="quantity" value="1" title="Qty" size="4" class="qty"><input type="button"
-                                        value="+" class="plus"></div>
+                                <div class="quantity">
+                                        <input type="button" value="-" class="minus">
+                                        <input type="text" name="quantity" value="1" title="Qty" size="4" class="qty">
+                                        <input type="button" value="+" class="plus">
+                                </div>
                             </div>
                             <div class="cart_btn">
-                                   <button type="button" class="btn btn-fill-out btn-addtocart"><i
-                                        class="icon-basket-loaded"></i> Add to cart </button>
-                                        <button type="button" class="btn btn-fill-out btn-addtocart"><i
-                                        class="icon-basket-loaded"></i> Pay Now </button></div>
+                                        <a  href="/cart/add/{{product.id}}/1"  type="button" class="btn btn-fill-out btn-addtocart" >
+                                        <i class="icon-basket-loaded"></i> 
+                                          Add to cart 
+                                        </a>
+                                        
+                                        <button type="button" class="btn btn-fill-out ">
+                                        <i class="icon-basket-loaded"></i> 
+                                            Pay Now 
+                                        </button>
+                                        
+                                        </div>
                             <div class="cart_btn"><a href="#" class="add_compare"><i class="icon-shuffle"></i></a><a
                                     href="#" class="add_wishlist"><i class="icon-heart"></i></a>
                             </div>
