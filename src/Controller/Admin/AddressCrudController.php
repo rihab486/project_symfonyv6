@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CountryField;
 
 class AddressCrudController extends AbstractCrudController
@@ -38,6 +39,11 @@ class AddressCrudController extends AbstractCrudController
             TextField::new('city'),
             CountryField::new('state'),
             AssociationField::new('user'),
+            ChoiceField::new('address_type')->setChoices([
+                'Billing' => 'Billing',
+                'Shipping' => 'Shipping'
+                
+            ]),
             TextField::new('code_postal'),
             TextField::new('city'),
             TextEditorField::new('more_details'),

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}JStore | Your account{% endblock %}
 
 {% block body %}
 {% include "page_head/page_head.html.twig" with {'page_name':'Account'}%}
@@ -93,36 +93,117 @@
                             </div>
                         </div>
                   	</div>
-					<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-                    	<div class="row">
-                        	<div class="col-lg-6">
-                                <div class="card mb-3 mb-lg-0">
-                                    <div class="card-header">
-                                        <h3>Billing Address</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
-                                        <p>New York</p>
-                                        <a href="#" class="btn btn-fill-out">Edit</a>
-                                    </div>
+					<div class="tab-pane fade " id="address" role="tabpanel" aria-labelledby="address-tab">
+                           <div class="row">
+                                <div class="action d-flex mb-2">
+                                    <a href="#" id="add_new_address" class="btn btn-fill-out">Add New</a>
+
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
+                                <div class="col-lg-12 d-none" id="add_form">
+                                    <form action="">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-3">
+                                                <label>Address Type <span class="required">*</span></label>
+                                                <select name="address_type" id="" class="form-control" style="">
+                                                    <option value="Billing">Billing</option>
+                                                    <option value="Shipping">Shipping</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-12 mb-3">
+                                                <label>Name <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="name" type="text">
+                                            </div>
+                                            <div class="form-group col-md-12 mb-3">
+                                                <label>Full Name <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="client_name" type="text">
+                                            </div>
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label>Street <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="street" type="text">
+                                            </div>
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label>Code Zip <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="code_postal" type="text">
+                                            </div>
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label>City <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="city" type="text">
+                                            </div>
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label>Country <span class="required">*</span></label>
+                                                <input required="" class="form-control" name="state" type="text">
+                                            </div>
+                                            <div class="d-flex">
+                                                <button class="btn btn-fill-out">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-12 d-block" id="address_details">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h3>Shipping Address</h3>
+                                        <div class="card-header">
+                                            <h3>Addresses</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive address_content">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>Addresse</th>
+                                                            <th>Action</th>
+                                                         
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       {% for address in addresse %}
+                                                          <tr>
+                                                            <td>{{address.id}}</td>
+                                                           
+                                                            <td> {{address.street}} {{address.codePostal}} {{address.city}} {{address.state}}</td>
+                                                            <td><a  href="" class="btn btn-fill-out btn-sm edit-address">Edit</a></td>
+                                                             <td><a  href="" class="btn btn-fill-out btn-sm remove_address">Delete</a></td>
+                                                        
+                                                        </tr>
+                                                        {% endfor %}
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
-                                        <p>New York</p>
-                                        <a href="#" class="btn btn-fill-out">Edit</a>
-                                    </div>
+                                    {% for address in addresse %}
+                                    
+                                    
+                                     <div class="col-lg-5">
+                                            <div class="card mb-3 mb-lg-0">
+                                                <div class="card-header">
+                                                    <h3>{{ address.addressType}} Address</h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <address>{{ address.street}}<br>
+                                                        {{ address.codePostal}}<br>
+                                                        {{ address.city}} <br>
+                                                        {{ address.state}} <br> 
+                                                    </address>
+                                                    <p>{{ address.moreDetails}}</p>
+                                                    <a href="#" class="btn btn-fill-out">Edit</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+                                       
+                                    {% endfor %}
+                                    
                                 </div>
+
                             </div>
-                        </div>
+                    
 					</div>
                     <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
 						<div class="card">
+                          
+                       
                         	<div class="card-header">
                                 <h3>Account Details</h3>
                             </div>
@@ -176,5 +257,88 @@
 
 
 </div>
-<!-- END MAIN CONTENT -->
+<!-- END MAIN CONTENT  const displayAddress = (addresse){
+
+    }
+
+     <tr>
+                    <td>#${address.id}</td>
+                    <td>${address.street} ${address.codePostal} ${address.city} ${address.state}</td>                       
+                    <td><a href="#" class="btn btn-fill-out btn-sm edit_address">Edit</a></td>
+                    <td><a href="#" data-id="${address.id}" class="btn btn-fill-out btn-sm remove_address">Delete</a></td>
+                </tr>
+    
+    -->
+
+       const displayAddress = (addresses) => {
+        const tbody = document.querySelector(".address_content tbody")
+        if (tbody) {
+            tbody.innerHTML = ""
+            addresses.forEach(address => {
+                tbody.innerHTML += `
+               
+              
+                `
+
+            });
+            addform.classList.add("d-none")
+            addressDetails.classList.remove("d-none")
+            addAddressButton.innerHTML = "Add New"
+            addEvent()
+        }
+    }
 {% endblock %}
+
+{% block javascripts %}
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+    const addAddressButton = document.getElementById("add_new_address");
+    const addform = document.getElementById("add_form");
+    const addressDetails = document.getElementById("address_details");
+   
+
+    
+        addAddressButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            if(addform.classList.contains("d-none")){
+            addform.classList.remove("d-none")
+            addressDetails.classList.add("d-none")
+            addAddressButton.innerHTML = "Cancel"
+        }else{
+            addAddressButton.innerHTML = "Add New"
+            addform.classList.add("d-none")
+            addressDetails.classList.remove("d-none")
+
+        }
+        });
+        addform.addEventListener("submit", async (event)=>{
+            event.preventDefault()
+            console.log("------- SUBMIT ------------");
+            const form = document.querySelector("#add_form form")
+            const formData = new FormData(form)
+
+            const response = await fetch("/api/address", {
+                method: "POST",
+                body: formData
+            })
+
+            const result = await response.json()
+
+            if(result.isSuccess){
+                const addresses = result.data
+            
+                displayAddress(addresses)
+
+            }
+
+
+    })
+
+    
+});
+
+</script>
+{% endblock %}
+
+
+          

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\Address;
 use App\Repository\AddressRepository;
@@ -10,28 +10,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AccountController extends AbstractController
+#[Route('/api')]
+class ApiAddressController extends AbstractController
 {
-    #[Route('/account', name: 'app_account')]
-    public function index(AddressRepository $addressRepository): Response
-    {
-        $user = $this->getUser();
-
-        $addresse = $addressRepository->findByUser($user);
-
-        return $this->render('account/index.html.twig', [
-            'controller_name' => 'AccountController',
-            'addresse' => $addresse,
-        ]);
-    }
-    #[Route('api/address', name: 'app_api_address', methods: ['POST'])]
-    public function postAddress(
+    #[Route('/address', name: 'app_post_address', methods: ['POST'])]
+    public function index(
         Request $req, 
         AddressRepository $addressRepository,
-        EntityManagerInterface  $manager): Response
+        EntityManagerInterface  $manager
+    ): Response
     {
-        $formData = $req->getPayload();
         $user = $this->getUser();
+
+        if(!$user){
+            return $this->json([
+                "isSuccess"=> false,
+                "message"=> "Not authorization !",
+                "data" => []
+            ]);
+        }
+
+        $formData = $req->getPayload();
         
         $address = new Address();
         $address->setName($formData->get('name'))
@@ -53,7 +52,10 @@ class AccountController extends AbstractController
             $addresses[$key] = $address;
         }
         
-
-        return $this->json($formData);
+        return $this->json([
+            "isSuccess"=> true,
+            "data" =>$addresses 
+        ]);
     }
+
 }
