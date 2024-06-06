@@ -52,10 +52,64 @@ class ApiAddressController extends AbstractController
             $addresses[$key] = $address;
         }
         
+
         return $this->json([
             "isSuccess"=> true,
             "data" =>$addresses 
         ]);
     }
 
+
+    #[Route('/address/{id}', name: 'app_api_post_address', methods: ['DELETE'])]
+    public function delete(
+        $id,
+        Request $req, 
+        AddressRepository $addressRepository,
+        EntityManagerInterface  $manager,
+    ): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user){
+            return $this->json([
+                "isSuccess"=> false,
+                "message"=> "Not authorization !",
+                "data" => []
+            ]);
+        }
+        
+        $address = $addressRepository->findOneById($id);
+
+        if(!$address){
+            return $this->json([
+                "isSuccess"=> false,
+                "message"=> "Address not found !",
+                "data" => []
+            ]);
+        }
+        
+        if($user !== $address->getUser()){
+            return $this->json([
+                "isSuccess"=> false,
+                "message"=> "Not authorization !",
+                "data" => []
+            ]);
+        }
+        
+        $manager->remove($address);
+        $manager->flush();
+
+        $addresses = $addressRepository->findByUser($user);
+        foreach ($addresses as $key => $address) {
+            $address->setUser(null);
+            $addresses[$key] = $address;
+        }
+        
+        
+
+        return $this->json([
+            "isSuccess"=> true,
+            "data" =>$addresses 
+        ]);
+    }
 }

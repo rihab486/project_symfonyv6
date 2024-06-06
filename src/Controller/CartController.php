@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Carrier;
+use App\Repository\CarrierRepository;
 use App\Services\CartService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,8 +13,10 @@ class CartController extends AbstractController
 {
     public function __construct(
         private CartService $cartService,
+        private CarrierRepository $carrierRepository ,
     ) {
         $this->cartService = $cartService;
+      
     }
 
     #[Route('/cart', name: 'app_cart')]
@@ -20,11 +24,13 @@ class CartController extends AbstractController
     {
         $cart = $this->cartService->getCartDetails();
         $cart_json =json_encode($cart);
+        $carriers = $this->carrierRepository->findAll();
         //return $this->json($cart_json);
         
         return $this->render('cart/index.html.twig', [
             'controller_name' => 'CartController',
             'cart' => $cart,
+            'carriers' =>$carriers ,
             'cart_json'=> $cart_json,
         ]);
     }

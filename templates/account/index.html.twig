@@ -100,7 +100,7 @@
 
                                 </div>
                                 <div class="col-lg-12 d-none" id="add_form">
-                                    <form action="">
+                                    <form action="post">
                                         <div class="row">
                                             <div class="form-group col-md-12 mb-3">
                                                 <label>Address Type <span class="required">*</span></label>
@@ -156,7 +156,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                       {% for address in addresse %}
+                                                       {% for address in addresses %}
                                                           <tr>
                                                             <td>{{address.id}}</td>
                                                            
@@ -172,7 +172,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% for address in addresse %}
+                                    {% for address in addresses %}
                                     
                                     
                                      <div class="col-lg-5">
@@ -257,18 +257,7 @@
 
 
 </div>
-<!-- END MAIN CONTENT  const displayAddress = (addresse){
 
-    }
-
-     <tr>
-                    <td>#${address.id}</td>
-                    <td>${address.street} ${address.codePostal} ${address.city} ${address.state}</td>                       
-                    <td><a href="#" class="btn btn-fill-out btn-sm edit_address">Edit</a></td>
-                    <td><a href="#" data-id="${address.id}" class="btn btn-fill-out btn-sm remove_address">Delete</a></td>
-                </tr>
-    
-    -->
 
        const displayAddress = (addresses) => {
         const tbody = document.querySelector(".address_content tbody")
@@ -290,28 +279,67 @@
 {% endblock %}
 
 {% block javascripts %}
-<script>
- document.addEventListener("DOMContentLoaded", function() {
-    const addAddressButton = document.getElementById("add_new_address");
-    const addform = document.getElementById("add_form");
-    const addressDetails = document.getElementById("address_details");
-   
 
-    
-        addAddressButton.addEventListener("click", function(event) {
-            event.preventDefault();
-            if(addform.classList.contains("d-none")){
-            addform.classList.remove("d-none")
-            addressDetails.classList.add("d-none")
-            addAddressButton.innerHTML = "Cancel"
-        }else{
-            addAddressButton.innerHTML = "Add New"
+<script>
+    const addform = document.getElementById("add_form")
+    const addAddressButton = document.getElementById("add_new_address");
+    const addressDetails = document.getElementById("address_details")
+
+    const displayAddress = (addresses) => {
+        const tbody = document.querySelector(".address_content tbody")
+        if (tbody) {
+            tbody.innerHTML = ""
+            addresses.forEach(address => {
+                tbody.innerHTML += `
+                <tr>
+                    <td>#${address.id}</td>
+                    <td>${address.street} ${address.codePostal} ${address.city} ${address.state}</td>                       
+                    <td><a href="#" class="btn btn-fill-out btn-sm edit_address">Edit</a></td>
+                    <td><a href="#" data-id="${address.id}" class="btn btn-fill-out btn-sm remove_address">Delete</a></td>
+                </tr>
+                `
+
+            });
             addform.classList.add("d-none")
             addressDetails.classList.remove("d-none")
-
+            addAddressButton.innerHTML = "Add New"
+            addEvent()
         }
+    }
+
+
+
+    const addEvent = (address) => {
+        const addform = document.getElementById("add_form")
+        const addAddressButton = document.getElementById("add_new_address");
+        const addressDetails = document.getElementById("address_details")
+        const remove_address_btns = document.querySelectorAll(".remove_address")
+
+
+        remove_address_btns.forEach((remove_address_btn) => {
+            remove_address_btn.addEventListener("click", async (event) => {
+                event.preventDefault()
+                const element = event.target
+                const id = element.dataset.id
+    
+                if (id) {
+                    const response = await fetch("/api/address/" + id, {
+                        method: "DELETE"
+                    })
+    
+                    const result = await response.json()
+    
+                    console.log(result);
+    
+                    if (result.isSuccess) {
+                        const addresses = result.data
+                        displayAddress(addresses)
+                    }
+                }
+            })
         });
-        addform.addEventListener("submit", async (event)=>{
+
+        addform.addEventListener("submit", async (event) => {
             event.preventDefault()
             console.log("------- SUBMIT ------------");
             const form = document.querySelector("#add_form form")
@@ -324,18 +352,37 @@
 
             const result = await response.json()
 
-            if(result.isSuccess){
+            if (result.isSuccess) {
                 const addresses = result.data
-            
+
                 displayAddress(addresses)
 
             }
 
 
+        })
+
+    }
+
+    addAddressButton.addEventListener("click", (event) => {
+        event.preventDefault()
+        if (addform.classList.contains("d-none")) {
+            addform.classList.remove("d-none")
+            addressDetails.classList.add("d-none")
+            addAddressButton.innerHTML = "Cancel"
+        } else {
+            addAddressButton.innerHTML = "Add New"
+            addform.classList.add("d-none")
+            addressDetails.classList.remove("d-none")
+
+        }
     })
 
-    
-});
+
+
+
+    addEvent()
+
 
 </script>
 {% endblock %}
