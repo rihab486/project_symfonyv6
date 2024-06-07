@@ -1,6 +1,7 @@
 <?php 
 namespace App\Services;
 
+use App\Repository\CarrierRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -9,20 +10,22 @@ class CartService {
     public function __construct(
         private RequestStack $requestStack,
         private ProductRepository $productRepo,
+        private CarrierRepository $carrierRepo,
     ) {
         // Accessing the session in the constructor is *NOT* recommended, since
         // it might not be accessible yet or lead to unwanted side-effects
         $this->session = $requestStack->getSession();
         $this->productRepo = $productRepo;
+      
     }
 
-    public function getCart()
+    public function get($key)
     {
-        return $this->session->get("cart", []);
+        return $this->session->get($key, []);
     }
-    public function updateCart($cart)
+    public function update($key,$cart)
     {
-        return $this->session->set("cart", $cart);
+        return $this->session->set($key, $cart);
     }
     public function addToCart($productId, $count = 1)
     {
@@ -30,7 +33,7 @@ class CartService {
         //     '1' => 3,
         //     '25' => 1,
         // ]
-        $cart = $this->getCart();
+        $cart = $this->get('cart');
 
         if(!empty($cart[$productId])){
             // product exist in cart
@@ -40,12 +43,12 @@ class CartService {
             $cart[$productId] = $count;
         }
 
-        $this->updateCart($cart);
+        $this->update("cart",$cart);
     }
 
     public function removeToCart($productId, $count = 1)
     {
-        $cart = $this->getCart();
+        $cart = $this->get('cart');
 
         if(isset($cart[$productId])){
             if($cart[$productId]  <= $count){
@@ -54,14 +57,14 @@ class CartService {
                 $cart[$productId] -= $count;
             }
 
-            $this->updateCart($cart);
+            $this->update("cart",$cart);
         }
 
     }
 
     public function clearCart()
     {
-        $this->updateCart([]);
+        $this->update("cart",[]);
     }
     public function getCartDetails()
     {
@@ -76,7 +79,7 @@ class CartService {
         //         ],
         //         "cart_sub_total" => 199
         // ]
-        $cart = $this->getCart();
+        $cart = $this->get('cart');;
         $result = [
             'items' => [],
             'sub_total' => 0,
@@ -102,6 +105,7 @@ class CartService {
                     ],
                     'quantity' => $quantity,
                     //'taxe' => 20,
+                    
                     'sub_total' => $current_sub_total,
                 ];
                 $result['sub_total'] = $sub_total;
@@ -110,16 +114,31 @@ class CartService {
 
             }else{
                 unset($cart[$productId]);
-                $this->updateCart($cart);
+                $this->update("cart",$cart);
             }
 
             
         }
-       
+       // dd ('carrier test', $this->carrierRepo->findAll()[0]);
+      $carrier =$this->get("carrier");
+      if(!$carrier){
+        $carrier = $this->carrierRepo->findAll()[0];
+        $carrier = [
+            "id" => $carrier -> getId(),
+            "name" => $carrier -> getName(),
+            "description"=> $carrier ->getDescription(),
+            "price"=> $carrier -> getPrice(),
 
-        return $result;
+               ];
+      $carrier =$this->update("carrier", $carrier);
+      }
+     
+     
+      $result["carrier"] = $carrier ;
+      return $result;
     }
 
+ 
     
 
 
