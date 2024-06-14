@@ -15,6 +15,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 
 class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,8 +24,9 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator , private RequestStack $requestStack,)
     {
+        $this->session = $requestStack->getSession();
     }
 
     public function authenticate(Request $request): Passport
@@ -47,10 +50,14 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        $redirectPath = $this->session->get("next");
+        if($redirectPath){
+            
+            return new RedirectResponse($this->urlGenerator->generate($redirectPath));
+            //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        }
 
-        // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_account'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        
     }
 
     protected function getLoginUrl(Request $request): string
