@@ -68,22 +68,13 @@ class CartService {
     }
     public function getCartDetails()
     {
-        // [
-        //     "items" => [
-        //             [
-        //                 'product' => [],
-        //                 'quantity' => 2,
-        //                 'taxe' => 20,
-        //                 'sub_total' => 199,
-        //             ]
-        //         ],
-        //         "cart_sub_total" => 199
-        // ]
+       
         $cart = $this->get('cart');;
         $result = [
             'items' => [],
             'sub_total' => 0,
             'cart_count' => 0,
+            'quantity' => 0,
         ];
 
         $sub_total = 0;
@@ -104,12 +95,15 @@ class CartService {
                         'regularPrice'=>$product->getRegularPrice(),
                     ],
                     'quantity' => $quantity,
-                    //'taxe' => 20,
-                    
+                    'taxe' => 0,
                     'sub_total' => $current_sub_total,
+                    
                 ];
                 $result['sub_total'] = $sub_total;
+                $result['taxe'] = 0 ;
                 $result['cart_count'] += $quantity;
+                $result['quantity'] += $quantity;
+
                
 
             }else{
@@ -128,14 +122,12 @@ class CartService {
             "name" => $carrier -> getName(),
             "description"=> $carrier ->getDescription(),
             "price"=> $carrier -> getPrice(),
-
-               ];
-      $carrier =$this->update("carrier", $carrier);
-      }
-     
-     
-      $result["carrier"] = $carrier ;
-      return $result;
+                  ];
+        $carrier =$this->update("carrier", $carrier);
+       }
+        $result["carrier"] = $carrier ;
+        $result["sub_total_with_carrier"] = $result["sub_total"] + $carrier["price"];
+        return $result;
     }
 
  

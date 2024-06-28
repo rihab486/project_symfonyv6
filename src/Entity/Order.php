@@ -26,6 +26,12 @@ class Order
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $delivrey_address = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $billing_address = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $shipping_address = null;
+
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -39,7 +45,7 @@ class Order
     private ?int $order_cost_ttc = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isPaid = null;
+    private ?bool $isPaid = false;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -105,6 +111,30 @@ class Order
     public function setDelivreyAddress(?string $delivrey_address): static
     {
         $this->delivrey_address = $delivrey_address;
+
+        return $this;
+    }
+
+    public function getBillingAddress(): ?string
+    {
+        return $this->billing_address;
+    }
+
+    public function setBillingAddress(?string $billing_address): static
+    {
+        $this->billing_address = $billing_address;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?string
+    {
+        return $this->shipping_address;
+    }
+
+    public function setShippingAddress(?string $shipping_address): static
+    {
+        $this->shipping_address = $shipping_address;
 
         return $this;
     }

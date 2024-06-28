@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 
 class OrderCrudController extends AbstractCrudController
 {
@@ -32,7 +34,11 @@ class OrderCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('client_name'),
             TextField::new('delivrey_address'),
-            TextField::new('quantity'),
+            TextField::new('billing_address'),
+            TextField::new('shipping_address'),
+            IntegerField::new('quantity'),
+            BooleanField::new('isPaid'),
+            MoneyField::new('carrier_price')->SetCurrency("EUR"),
             MoneyField::new('order_cost')->SetCurrency("EUR"),
             MoneyField::new('taxe')->SetCurrency("EUR"),
             MoneyField::new('order_cost_ttc')->SetCurrency("EUR"),
