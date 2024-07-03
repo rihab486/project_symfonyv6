@@ -38,7 +38,7 @@ class PaymentMethodCrudController extends AbstractCrudController
             ->setUploadDir("/public/assets/images/payment_methods_logos")
             ->setUploadedFileNamePattern('[randomhash].[extension]'),
             TextEditorField::new('more_description')->hideOnIndex(),
-            TextField::new('test_public_api_key')->hideOnIndex(),
+            TextField::new('test_public_api_key'),
             TextField::new('test_private_api_key')->hideOnIndex(),
             TextField::new('prod_public_api_key')->hideOnIndex(),
             TextField::new('prod_private_api_key')->hideOnIndex(),

@@ -36,6 +36,8 @@ class OrderCrudController extends AbstractCrudController
             TextField::new('delivrey_address'),
             TextField::new('billing_address'),
             TextField::new('shipping_address'),
+            TextField::new('carrier_name'),
+
             IntegerField::new('quantity'),
             BooleanField::new('isPaid'),
             MoneyField::new('carrier_price')->SetCurrency("EUR"),

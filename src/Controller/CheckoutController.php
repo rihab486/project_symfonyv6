@@ -49,7 +49,8 @@ class CheckoutController extends AbstractController
 
         $orderId = $this->createOrder($cart);
      
-        //dd($orderId);
+        // dd($orderId);
+        // dd( $cart);
  
         $publickey =$stripeservice->getPublicKey();
 
@@ -73,6 +74,7 @@ class CheckoutController extends AbstractController
                 ->setTaxe($cart["taxe"])
                 ->setOrderCostTtc($cart["sub_total_with_carrier"])
                 ->setCarrierName($cart['carrier']['name'])
+                ->setCarrierId($cart['carrier']['id'])
                 ->setClientAddress("")
                 ->setCarrierPrice($cart['carrier']['price'])
                 ->setCarrierId($cart['carrier']['id'])
@@ -102,6 +104,20 @@ class CheckoutController extends AbstractController
         $this->em->flush();
 
         return $order->getId();
+
+    }
+
+    #[Route('/stripe/paiement/success', name: 'app_stripe_paiement_success')]
+    public function paymentSucces()
+    {
+        return $this->render('payment/index.html.twig', [
+            'controller_name' => 'PaymentController',
+            'cart'=>$cart,
+            'orderId' => $orderId,
+            'cart_json'=>$cart_json,
+            'public_key'=>$publickey,
+            'addresses'=>$addresses,
+        ]);
 
     }
 
