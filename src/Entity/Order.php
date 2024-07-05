@@ -68,6 +68,10 @@ class Order
     #[ORM\OneToMany(targetEntity: OrderDetails::class, mappedBy: 'myOrder')]
     private Collection $orderDetails;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeClientSecret = null;
+
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -300,6 +304,20 @@ class Order
 
         return $this;
     }
+
+    public function getStripeClientSecret(): ?string
+    {
+        return $this->stripeClientSecret;
+    }
+
+    public function setStripeClientSecret(?string $stripeClientSecret): static
+    {
+        $this->stripeClientSecret = $stripeClientSecret;
+
+        return $this;
+    }
+
+   
 
 
 

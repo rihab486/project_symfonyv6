@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class ApiStripeController extends AbstractController
 {
     #[Route('/api/stripe/payment-intent/{orderId}', name: 'app_stripe_payment-intent' , methods:['POST'])]
-    public function index($orderId,StripeService $stripeservice, Request $req,OrderRepository $orderRepo): Response
+    public function index($orderId,StripeService $stripeservice, Request $req,OrderRepository $orderRepo,EntityManagerInterface $em): Response
     {
         try{
                 $stripeSecretKey =$stripeservice->getPrivatekey() ;
@@ -38,6 +40,11 @@ class ApiStripeController extends AbstractController
                 $output = [
                     'clientSecret' => $paymentIntent->client_secret,
                 ];
+
+                $order->setStripeClientSecret($paymentIntent->client_secret);
+
+                $em->persist($order);
+                $em->flush();
             
                 //echo json_encode($output);
         
@@ -54,11 +61,11 @@ class ApiStripeController extends AbstractController
             }
 
         }
-        public function calculateOrderAmount($items){
-            return 1400;
-            //$cart->sub_total_with_carrier;
+        // public function calculateOrderAmount($items){
+        //     return 1400;
+        //     //$cart->sub_total_with_carrier;
 
-        }
+        // }
 
    
 }

@@ -22,12 +22,12 @@ class ApiOrderController extends AbstractController
         $order = $orderRep->findOneById($id);
 
        // dd($data);
-        if(!$order){
-           return $this->redirectToRoute('/chachout');
+        if(! $order){
+           return $this->redirectToRoute('/checkout');
         }
 
-        $order->setBillingAddress($data->get('billing_address'))
-        ->setShippingAddress($data->get('shipping_address'));
+        $order ->setBillingAddress($data->get('billing_address'))
+               ->setShippingAddress($data->get('shipping_address'));
 
         $em->persist($order);
         $em->flush();

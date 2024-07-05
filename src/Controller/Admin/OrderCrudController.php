@@ -13,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+
 
 class OrderCrudController extends AbstractCrudController
 {
@@ -34,12 +36,18 @@ class OrderCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('client_name'),
             TextField::new('delivrey_address'),
-            TextField::new('billing_address'),
-            TextField::new('shipping_address'),
+            TextField::new('billing_address')->hideOnIndex(),
+            TextField::new('shipping_address')->hideOnIndex(),
             TextField::new('carrier_name'),
-
+            TextField::new('StripeClientSecret')->hideOnIndex(),
             IntegerField::new('quantity'),
             BooleanField::new('isPaid'),
+            ChoiceField::new('status')->setChoices([
+                'In Progress' => 'In Progress',
+                'Order validated' => 'Order validated',
+                'Shipment in progress' => 'Shipment in progress',
+                'Delivered order' => 'Delivered order'
+            ]),
             MoneyField::new('carrier_price')->SetCurrency("EUR"),
             MoneyField::new('order_cost')->SetCurrency("EUR"),
             MoneyField::new('taxe')->SetCurrency("EUR"),
