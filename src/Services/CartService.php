@@ -4,9 +4,13 @@ namespace App\Services;
 use App\Repository\CarrierRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class CartService {
+    private SessionInterface $session;
 
+<<<<<<< HEAD
     public function __construct(
         private RequestStack $requestStack,
         private ProductRepository $productRepo,
@@ -18,6 +22,14 @@ class CartService {
         $this->productRepo = $productRepo;
       
     }
+=======
+    // public function __construct(private RequestStack $requestStack, private ProductRepository $productRep){
+
+
+    //    $this->session = $requestStack ->getSession();
+    //    $this->productRep= $productRep;
+    // }
+>>>>>>> origin/master
 
     public function get($key)
     {
@@ -46,6 +58,7 @@ class CartService {
         $this->update("cart",$cart);
     }
 
+<<<<<<< HEAD
     public function removeToCart($productId, $count = 1)
     {
         $cart = $this->get('cart');
@@ -134,4 +147,32 @@ class CartService {
     
 
 
+=======
+    public function removeToCart($productId ,$count=1)
+    {
+        $cart =$this->getCart();
+        
+        if(isset($cart[$productId])){
+
+            if($cart[$productId] <= $count){
+                unset($cart);
+               
+             }
+             else{
+                $cart[$productId] -= $count;
+             }
+
+             $this->updateCart($cart);
+           
+
+        }
+    }
+
+
+    public function clearProductFromCart()
+    {
+
+        $this->updateCart([]) ;
+    }
+>>>>>>> origin/master
 }

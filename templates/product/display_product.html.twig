@@ -18,6 +18,7 @@
                     </li>
                     <li><a href="shop-quick-view.html" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
 
+<<<<<<< HEAD
                     <li><a href="wishlist/add/{{product.id}}" class="add-to-wishlist" ><i class="icon-heart"></i></a></li>
                 </ul>
             </div>
@@ -52,3 +53,55 @@
         </div>
     </div>
 </div>
+=======
+                                                        <li  class="add-to-cart"><a
+                                                                 href="/cart/add/{{product.id}}/1"><i class="icon-basket-loaded"></i> Add To Cart </a>
+                                                        </li>
+
+                                                        <li ><a href="shop-compare.html" class="popup-ajax">
+                                                          <i class="icon-shuffle"></i></a></li>
+
+                                                        <li ><a href="shop-quick-view.html" class="popup-ajax">
+                                                          <i class="icon-magnifier-add"></i></a></li>
+
+                                                        <li ><a href="#"><i class="icon-heart"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div  class="product_info">
+                                                <h6  class="product_title">
+                                                   <a href="/product/{{product.slug}}"> {{product.name}}</a>
+                                                </h6>
+                                                <div  class="product_price">
+                                                     <span class="price">{{product.soldePrice/100}}</span><del>
+                                                       {{product.regularPrice/100}} </del>
+                                                     <div class="on_sale"><span>{{((product.regularPrice*10 - product.soldePrice) / product.regularPrice) | number_format(2,'.') }} % Off</span></div>
+                                                </div>
+                                                <div  class="rating_wrap">
+                                                    <div  class="rating">
+                                                        <div  class="product_rate"
+                                                            style="width: 80%;"></div>
+                                                    </div><span 
+                                                        class="rating_num">(21)</span>
+                                                </div>
+                                                <div  class="pr_desc">
+                                                    <p >{{product.description}}</p>
+                                                </div>
+
+                                            
+                                                 <div  class="pr_switch_wrap">
+                                                    <div  class="product_color_switch"><span
+                                                             data-color="#87554B"
+                                                            class="active"></span><span 
+                                                            data-color="#333333"></span><span
+                                                             data-color="#DA323F"></span>
+                                                    </div>
+                                                </div>
+
+
+                                             
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+>>>>>>> origin/master
